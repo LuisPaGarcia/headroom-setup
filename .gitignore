@@ -1,0 +1,25 @@
+# Local environment and secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Docker Compose local overrides
+docker-compose.override.yml
+docker-compose.*.override.yml
+
+# Runtime data and caches
+.cache/
+cache/
+data/
+logs/
+*.log
+
+# macOS
+.DS_Store
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.swp
+*.swo

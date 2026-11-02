@@ -1,0 +1,49 @@
+services:
+  headroom:
+    image: ${HEADROOM_IMAGE}
+    container_name: ${HEADROOM_CONTAINER_NAME}
+    restart: unless-stopped
+    entrypoint: ["headroom", "proxy"]
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - ${HEADROOM_PORT}
+      - --mode
+      - ${HEADROOM_MODE}
+      - --backend
+      - ${HEADROOM_BACKEND}
+      - --no-telemetry
+    environment:
+      HOME: /tmp/headroom-home
+      PYTHONUNBUFFERED: "1"
+      HEADROOM_MODE: ${HEADROOM_MODE}
+      HEADROOM_BACKEND: ${HEADROOM_BACKEND}
+      HEADROOM_ROLLOUT_CHANNEL: beta
+      HEADROOM_OUTPUT_SHAPER: "1"
+      HEADROOM_TELEMETRY: "off"
+      HEADROOM_DEPLOYMENT_RUNTIME: docker
+      HEADROOM_DEPLOYMENT_PRESET: persistent-docker
+      HEADROOM_DEPLOYMENT_SUPERVISOR: none
+      HEADROOM_WORKSPACE_DIR: /tmp/headroom-home/.headroom
+      HEADROOM_CONFIG_DIR: /tmp/headroom-home/.headroom/config
+      XDG_CACHE_HOME: /tmp/headroom-home/.cache
+      HF_HOME: /tmp/headroom-home/.cache/huggingface
+      AWS_REGION: ${AWS_REGION}
+      OLLAMA_CONTEXT_LENGTH: "16392"
+      OLLAMA_KV_CACHE_TYPE: q8_0
+    ports:
+      - "${HEADROOM_HOST_IP}:${HEADROOM_PORT}:${HEADROOM_PORT}"
+    volumes:
+      - ${HEADROOM_HOST_HOME}/.headroom:/tmp/headroom-home/.headroom
+      - ${HEADROOM_HOST_HOME}/.claude:/tmp/headroom-home/.claude
+      - ${HEADROOM_HOST_HOME}/.codex:/tmp/headroom-home/.codex
+      - ${HEADROOM_HOST_HOME}/.gemini:/tmp/headroom-home/.gemini
+      - ${HEADROOM_HOST_HOME}/.config/opencode:/tmp/headroom-home/.config/opencode
+      - ${HEADROOM_CACHE_DIR}:/tmp/headroom-home/.cache
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:${HEADROOM_PORT}/readyz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
