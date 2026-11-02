@@ -30,8 +30,11 @@ services:
       XDG_CACHE_HOME: /tmp/headroom-home/.cache
       HF_HOME: /tmp/headroom-home/.cache/huggingface
       AWS_REGION: ${AWS_REGION}
-      OLLAMA_CONTEXT_LENGTH: "16392"
-      OLLAMA_KV_CACHE_TYPE: q8_0
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
     ports:
       - "${HEADROOM_HOST_IP}:${HEADROOM_PORT}:${HEADROOM_PORT}"
     volumes:

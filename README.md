@@ -26,10 +26,13 @@ Headroom listens on `http://127.0.0.1:8787`.
 
 Edit `.env` for Docker-machine settings:
 
-- `HEADROOM_IMAGE` changes the image/tag.
+- `HEADROOM_IMAGE` changes the image/tag. The default `latest` tag uses Headroom's distroless image to reduce image footprint; it has no shell for interactive container debugging.
 - `HEADROOM_PORT` changes the host and container port.
-- `HEADROOM_MODE` and `HEADROOM_BACKEND` change the proxy mode/backend.
+- `HEADROOM_MODE` and `HEADROOM_BACKEND` change the proxy mode/backend. The default `token` mode targets token reduction; use `cache` when optimizing for prompt caching.
 - `HEADROOM_CACHE_DIR` changes where Hugging Face and other runtime caches live on the host.
+
+Set provider credentials in `.env` or export them before `make up`. Compose passes
+OpenAI, Anthropic, and AWS credentials into the container when configured.
 
 Headroom app settings still live in:
 
